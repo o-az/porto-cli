@@ -3,7 +3,7 @@ set dotenv-load := true
 set positional-arguments := true
 
 onboard *args='':
-    cargo run --manifest-path Cargo.toml -- onboard {{ args }}
+    cargo run --manifest-path crates/porto-cli/Cargo.toml -- onboard {{ args }}
 
 build *args='':
     cargo build {{ args }}
@@ -21,6 +21,3 @@ lint:
 check: fmt
     cargo check --all-features --release
     cargo clippy --all-targets --all-features --release
-
-publish:
-    cargo publish

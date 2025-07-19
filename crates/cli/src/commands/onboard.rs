@@ -12,13 +12,10 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
     println!("{}", style("Create a Porto Account").bold());
     println!();
 
-    // Create relay server for browser communication
     let relay_server = RelayServer::new().await?;
 
-    // Create admin key if requested
     let admin_key = if admin_key {
         let key = AdminKey::new()?;
-        // Register public key with relay for verification
         relay_server
             .register_public_key(key.public_key.clone())
             .await?;
@@ -27,11 +24,9 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
         None
     };
 
-    // Build dialog URL for wallet connection
     let mut dialog_builder = DialogBuilder::new(dialog);
     dialog_builder.set_relay_url(relay_server.url().to_string());
 
-    // Create account
     let spinner = Spinner::new("Creating account (check browser window)...");
 
     let connect_params = ConnectParams {
@@ -55,10 +50,8 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
     let url = dialog_builder.build_url(&connect_request)?;
     dialog_builder.open_dialog(&url).await?;
 
-    // Wait for actual response from browser
     let response = relay_server.wait_for_response(connect_request.id).await?;
 
-    // Parse the accounts from response
     let accounts: Vec<String> = response
         .get("accounts")
         .and_then(|a| a.as_array())
@@ -94,11 +87,9 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
     let url = dialog_builder.build_url(&add_funds_request)?;
     dialog_builder.open_dialog(&url).await?;
 
-    // Wait for onramp completion
     relay_server.wait_for_response(add_funds_request.id).await?;
     spinner.stop_with_message("Onramped.");
 
-    // Send success message to dialog
     let _ = relay_server
         .send_message(
             "success",

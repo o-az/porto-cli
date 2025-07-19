@@ -20,14 +20,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Create a Porto Account
     #[command(visible_alias = "o")]
     Onboard {
-        /// Create and provision an additional admin key for server access
         #[arg(short, long, default_value = "false")]
         admin_key: bool,
 
-        /// Dialog hostname
         #[arg(short, long, default_value = "stg.id.porto.sh")]
         dialog: String,
     },

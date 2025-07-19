@@ -1,0 +1,62 @@
+name: "Checks"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  RUST_BACKTRACE: full
+  CARGO_TERM_COLOR: always
+  ACTIONS_RUNNER_DEBUG: true
+
+jobs:
+  checks:
+    name: "Checks"
+    timeout-minutes: 3
+    runs-on: ["ubuntu-latest"]
+    steps:
+      - name: "🔑 Checkout"
+        uses: actions/checkout@v4
+
+      - name: "🦀 Setup Rust"
+        uses: dtolnay/rust-toolchain@nightly
+
+      - run: "Cargo check --all-targets --all-features"
+
+  clippy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: "🔑 Checkout"
+        uses: actions/checkout@v4
+
+      - name: "🦀 Setup Rust"
+        uses: dtolnay/rust-toolchain@clippy
+
+      - uses: Swatinem/rust-cache@master
+        with:
+          cache-on-failure: true
+
+      - name: "🖇️ Clippy"
+        run: cargo clippy --workspace --all-targets --all-features
+        env:
+          RUSTFLAGS: -Dwarnings
+
+  rustfmt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: "🔑 Checkout"
+        uses: actions/checkout@v4
+
+      - name: "🦀 Setup Rust"
+        uses: dtolnay/rust-toolchain@clippy
+        with:
+          components: rustfmt
+      - run: cargo fmt --all --check
