@@ -1,45 +1,25 @@
-[package]
-name = "porto"
-version = "0.1.0"
+
+[workspace]
+members = ["crates/cli"]
+
+resolver = "3"
+
+[workspace.package]
 edition = "2024"
+version = "0.1.0"
 authors = ["Porto Contributors"]
-description = "CLI for Porto - Next-Generation Account Stack for Ethereum"
-repository = "https://github.com/wevm/porto"
+description = "porto.sh"
+repository = "https://github.com/o-az/porto-cli"
 license = "MIT"
 readme = "README.md"
 
-[[bin]]
-name = "porto"
-path = "src/main.rs"
+[workspace.lints.rust]
+redundant_imports = "warn"
+redundant-lifetimes = "warn"
+rust-2018-idioms = "warn"
+unused-must-use = "warn"
 
-[dependencies]
-clap = { version = "4.5", features = ["derive", "cargo", "env"] }
-tokio = { version = "1.46.1", features = ["full"] }
-anyhow = "1.0.98"
-thiserror = "2.0.12"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.141"
-dialoguer = "0.11"
-indicatif = "0.18"
-console = "0.16"
-webbrowser = "1.0"
-reqwest = { version = "0.12", features = ["json"] }
-hex = "0.4"
-rand = "0.9"
-secp256k1 = { version = "0.31", features = ["rand"] }
-sha3 = "0.10"
-dirs = "6.0"
-colored = "3.0"
-url = "2.5"
-uuid = { version = "1.17", features = ["v4", "serde"] }
-axum = { version = "0.8", features = ["tokio"] }
-tower = "0.5"
-tower-http = { version = "0.6", features = ["cors"] }
-tokio-stream = { version = "0.1", features = ["sync"] }
-futures-util = "0.3.31"
-
-[dev-dependencies]
-tempfile = "3.20.0"
-mockito = "1.7.0"
-assert_cmd = "2.0"
-predicates = "3.1"
+[profile.maxperf]
+inherits = "release"
+lto = "fat"
+codegen-units = 1
