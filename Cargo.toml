@@ -1,0 +1,45 @@
+[package]
+name = "porto-cli"
+version = "0.1.0"
+edition = "2024"
+authors = ["Porto Contributors"]
+description = "CLI for Porto - Next-Generation Account Stack for Ethereum"
+repository = "https://github.com/wevm/porto"
+license = "MIT"
+readme = "README.md"
+
+[[bin]]
+name = "porto"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "cargo", "env"] }
+tokio = { version = "1.46.1", features = ["full"] }
+anyhow = "1.0.98"
+thiserror = "2.0.12"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.141"
+dialoguer = "0.11"
+indicatif = "0.17"
+console = "0.15"
+webbrowser = "1.0"
+reqwest = { version = "0.12", features = ["json"] }
+hex = "0.4"
+rand = "0.8"
+secp256k1 = { version = "0.29", features = ["rand"] }
+sha3 = "0.10"
+dirs = "5.0"
+colored = "2.1"
+url = "2.5"
+uuid = { version = "1.10", features = ["v4", "serde"] }
+axum = { version = "0.7", features = ["tokio"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
+futures-util = "0.3.31"
+
+[dev-dependencies]
+tempfile = "3.20.0"
+mockito = "1.7.0"
+assert_cmd = "2.0"
+predicates = "3.1"
