@@ -4,8 +4,13 @@ A command-line interface for Porto - Next-Generation Account Stack for Ethereum.
 
 ## Usage
 
+### Installation
+
 ```sh
-# install first
+cargo install --locked porto
+```
+
+```sh
 cargo install
 ```
 
