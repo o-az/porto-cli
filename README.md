@@ -2,25 +2,24 @@
 
 A command-line interface for Porto - Next-Generation Account Stack for Ethereum.
 
-## Installation
-
-```bash
-cargo install --path .
-```
-
 ## Usage
+
+```sh
+# install first
+cargo install
+```
 
 ### Create a Porto Account
 
 ```bash
 # Basic account creation
-porto onboard
+cargo run --package porto onboard
 
 # Create account with admin key for server access
-porto onboard --admin-key
+cargo run --package porto onboard --admin-key
 
 # Use custom dialog hostname
-porto onboard --dialog custom.porto.sh
+cargo run --package porto onboard --dialog custom.porto.sh
 ```
 
 ### Commands
@@ -32,42 +31,52 @@ porto onboard --dialog custom.porto.sh
 ## Development
 
 ```bash
-# Build the project
+# Build the entire workspace
 cargo build
 
-# Run tests
-cargo test
+# Build only the CLI crate
+cargo build --package porto
+
+# Run tests for all workspace members
+cargo test --workspace
+
+# Run tests for the CLI crate only
+cargo test --package porto
 
 # Run with debug output
-RUST_LOG=debug cargo run -- onboard
+RUST_LOG=debug cargo run --package porto -- onboard
 ```
-
-## Architecture
-
-The CLI is structured using modern Rust best practices:
-
-- **clap v4** - Command-line argument parsing with derive macros
-- **tokio** - Async runtime for handling concurrent operations
-- **anyhow/thiserror** - Error handling with context
-- **serde** - Serialization/deserialization of data structures
-- **indicatif** - Progress indicators and spinners
-- **dialoguer** - Interactive prompts
 
 ### Project Structure
 
 ```
 porto-cli/
-├── Cargo.toml
-├── src/
-│   ├── main.rs          # Entry point and CLI definition
-│   ├── error.rs         # Error types and handling
-│   ├── commands/        # Command implementations
-│   │   ├── mod.rs
-│   │   └── onboard.rs   # Onboard command
-│   └── utils/           # Utility modules
-│       ├── mod.rs
-│       ├── crypto.rs    # Cryptographic operations
-│       ├── dialog.rs    # Dialog communication
-│       └── spinner.rs   # UI components
-└── tests/               # Integration tests
+├── Cargo.toml           # Workspace configuration
+├── README.md
+├── .cargo/
+│   └── config.toml      # Cargo configuration
+└── crates/
+    └── cli/             # Main CLI crate
+        ├── Cargo.toml
+        ├── src/
+        │   ├── main.rs          # Entry point and CLI definition
+        │   ├── error.rs         # Error types and handling
+        │   ├── commands/        # Command implementations
+        │   │   ├── mod.rs
+        │   │   └── onboard.rs   # Onboard command
+        │   └── utils/           # Utility modules
+        │       ├── mod.rs
+        │       ├── crypto.rs    # Cryptographic operations
+        │       ├── dialog.rs    # Dialog communication
+        │       ├── relay.rs     # Relay server functionality
+        │       └── spinner.rs   # UI components
+        └── tests/               # Integration tests
 ```
+
+### Workspace Configuration
+
+This project uses Cargo workspaces to organize the codebase. The workspace is configured in the root `Cargo.toml` with the following structure:
+
+- **Workspace Members**: Currently includes `crates/cli` as the main CLI crate
+- **Shared Dependencies**: Common dependencies and configurations are defined at the workspace level
+- **Unified Build**: All crates in the workspace can be built and tested together

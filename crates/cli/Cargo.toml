@@ -1,5 +1,7 @@
 [package]
 name = "porto"
+categories = ["command-line-utilities"]
+keywords = ["cli", "porto-cli", "web3-tui"]
 description = "CLI for Porto - Next-Generation Account Stack for Ethereum"
 
 readme.workspace = true

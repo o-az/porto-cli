@@ -16,7 +16,7 @@ fn test_onboard_help() {
         .arg("--help")
         .assert()
         .success()
-        .stdout(predicate::str::contains("Create a Porto Account"));
+        .stdout(predicate::str::contains("Usage: porto onboard [OPTIONS]"));
 }
 
 #[test]
