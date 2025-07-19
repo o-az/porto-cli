@@ -7,11 +7,12 @@ resolver = "3"
 [workspace.package]
 edition = "2024"
 version = "0.1.0"
-authors = ["Porto Contributors"]
-description = "porto.sh"
-repository = "https://github.com/o-az/porto-cli"
 license = "MIT"
 readme = "README.md"
+homepage = "https://porto.sh"
+authors = ["Porto Contributors"]
+repository = "https://github.com/o-az/porto-cli"
+description = "Sign in with superpowers. Buy, swap, subscribe, and much more. No passwords or extensions required."
 
 [workspace.lints.rust]
 redundant_imports = "warn"
