@@ -10,7 +10,7 @@ build *args='':
 
 test:
     cargo nextest
-    
+
 fmt:
     taplo format
     cargo fmt --all

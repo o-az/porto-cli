@@ -32,6 +32,9 @@ enum Commands {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // Clear the screen
+    print!("\x1B[2J\x1B[1;1H");
+
     let cli = Cli::parse();
 
     match cli.command {
