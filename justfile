@@ -8,6 +8,9 @@ onboard *args='':
 build *args='':
     cargo build {{ args }}
 
+test:
+    cargo nextest
+    
 fmt:
     taplo format
     cargo fmt --all

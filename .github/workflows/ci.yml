@@ -20,6 +20,17 @@ env:
   ACTIONS_RUNNER_DEBUG: true
 
 jobs:
+  test:
+    name: "Test"
+    timeout-minutes: 3
+    runs-on: ["ubuntu-latest"]
+    steps:
+      - name: "🔑 Checkout"
+        uses: actions/checkout@v4
+
+      - name: '🧪 nextest'
+        uses: taiki-e/install-action@nextest
+
   checks:
     name: "Checks"
     timeout-minutes: 3
