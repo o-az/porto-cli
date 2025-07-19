@@ -1,0 +1,10 @@
+#:schema https://www.schemastore.org/taplo.json
+
+# Note: The taplo language server will not automatically pickup changes to taplo.toml.
+# You must manually trigger "editor: restart language server or reload" Zed for it to pickup changes.
+
+include = ["**/*.toml"]
+exclude = ["Cargo.lock", "**/target/**"]
+
+[formatting]
+align_entries = false

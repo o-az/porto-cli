@@ -2,35 +2,20 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum PortoError {
-    #[error("Failed to connect to wallet: {0}")]
-    WalletConnectionError(String),
-
     #[error("Failed to create account: {0}")]
-    AccountCreationError(String),
-
-    #[error("Failed to onramp funds: {0}")]
-    OnrampError(String),
-
-    #[error("Failed to initialize account: {0}")]
-    InitializationError(String),
+    AccountCreation(String),
 
     #[error("HTTP request failed: {0}")]
-    HttpError(#[from] reqwest::Error),
+    Http(#[from] reqwest::Error),
 
     #[error("JSON parsing error: {0}")]
-    JsonError(#[from] serde_json::Error),
+    Json(#[from] serde_json::Error),
 
     #[error("IO error: {0}")]
-    IoError(#[from] std::io::Error),
-
-    #[error("Crypto error: {0}")]
-    CryptoError(String),
-
-    #[error("Dialog communication error: {0}")]
-    DialogError(String),
+    Io(#[from] std::io::Error),
 
     #[error("Dialog interaction error: {0}")]
-    DialogueError(#[from] dialoguer::Error),
+    Dialogue(#[from] dialoguer::Error),
 }
 
 pub type Result<T> = std::result::Result<T, PortoError>;

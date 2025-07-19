@@ -1,0 +1,2 @@
+# from https://github.com/foundry-rs/foundry/blob/master/clippy.toml
+disallowed-macros = []

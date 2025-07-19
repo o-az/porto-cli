@@ -21,10 +21,7 @@ impl Spinner {
     }
 
     pub fn stop_with_message(&self, message: &str) {
-        self.pb.finish_with_message(format!("✓ {}", style(message).green()));
-    }
-
-    pub fn stop_with_error(&self, message: &str) {
-        self.pb.finish_with_message(format!("✗ {}", style(message).red()));
+        self.pb
+            .finish_with_message(format!("✓ {}", style(message).green()));
     }
 }

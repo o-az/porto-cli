@@ -1,11 +1,12 @@
 use crate::error::{PortoError, Result};
-use crate::utils::{AdminKey, AdminKeyGrant, ConnectParams, DialogBuilder, DialogRequest, RelayServer, Spinner};
+use crate::utils::{
+    AdminKey, AdminKeyGrant, ConnectParams, DialogBuilder, DialogRequest, RelayServer, Spinner,
+};
 use console::style;
 use dialoguer::Confirm;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::path::PathBuf;
-
 
 pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
     println!("{}", style("Create a Porto Account").bold());
@@ -18,7 +19,9 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
     let admin_key = if admin_key {
         let key = AdminKey::new()?;
         // Register public key with relay for verification
-        relay_server.register_public_key(key.public_key.clone()).await?;
+        relay_server
+            .register_public_key(key.public_key.clone())
+            .await?;
         Some(key)
     } else {
         None
@@ -30,7 +33,7 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
 
     // Create account
     let spinner = Spinner::new("Creating account (check browser window)...");
-    
+
     let connect_params = ConnectParams {
         create_account: true,
         grant_admins: admin_key.as_ref().map(|key| {
@@ -54,9 +57,10 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
 
     // Wait for actual response from browser
     let response = relay_server.wait_for_response(connect_request.id).await?;
-    
+
     // Parse the accounts from response
-    let accounts: Vec<String> = response.get("accounts")
+    let accounts: Vec<String> = response
+        .get("accounts")
         .and_then(|a| a.as_array())
         .and_then(|arr| {
             arr.iter()
@@ -65,18 +69,20 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
                 .collect::<Vec<_>>()
                 .into()
         })
-        .ok_or_else(|| PortoError::AccountCreationError("No accounts returned".to_string()))?;
-    
+        .ok_or_else(|| PortoError::AccountCreation("No accounts returned".to_string()))?;
+
     if accounts.is_empty() {
-        return Err(PortoError::AccountCreationError("No accounts created".to_string()));
+        return Err(PortoError::AccountCreation(
+            "No accounts created".to_string(),
+        ));
     }
-    
+
     let account_address = accounts[0].clone();
     spinner.stop_with_message("Account created.");
 
     // Onramp
     let spinner = Spinner::new("Onramping (check browser window)...");
-    
+
     let add_funds_request = DialogRequest {
         method: "wallet_addFunds".to_string(),
         params: serde_json::json!([{
@@ -93,16 +99,21 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
     spinner.stop_with_message("Onramped.");
 
     // Send success message to dialog
-    let _ = relay_server.send_message(
-        "success",
-        serde_json::json!({
-            "content": "You have successfully created an account.",
-            "title": "Account created"
-        })
-    ).await;
-    
+    let _ = relay_server
+        .send_message(
+            "success",
+            serde_json::json!({
+                "content": "You have successfully created an account.",
+                "title": "Account created"
+            }),
+        )
+        .await;
+
     println!();
-    println!("{}", style("✓ You have successfully created an account.").green());
+    println!(
+        "{}",
+        style("✓ You have successfully created an account.").green()
+    );
 
     // Initialize account if admin key was created
     if let Some(ref key) = admin_key {
@@ -118,18 +129,18 @@ pub async fn execute(admin_key: bool, dialog: String) -> Result<()> {
 
         println!();
         println!("{}: {}", style("Address").bold(), account_address);
-        
+
         if reveal {
             println!("{}: {}", style("Private key").bold(), key.private_key);
         } else {
-            let key_file = PathBuf::from(format!("{}.key", account_address));
+            let key_file = PathBuf::from(format!("{account_address}.key"));
             fs::write(&key_file, &key.private_key)?;
-            
+
             // Set file permissions to 0600 (read/write for owner only)
             let mut perms = fs::metadata(&key_file)?.permissions();
             perms.set_mode(0o600);
             fs::set_permissions(&key_file, perms)?;
-            
+
             println!(
                 "{}: {}",
                 style("Private key saved securely to").bold(),

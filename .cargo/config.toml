@@ -1,0 +1,7 @@
+[alias] # command aliases
+b = "build"
+c = "check"
+t = "test"
+r = "run"
+rr = "run --release"
+rmp = "run --manifest-path Cargo.toml --"

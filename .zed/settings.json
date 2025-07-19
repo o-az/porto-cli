@@ -1,0 +1,14 @@
+{
+  "formatter": "auto",
+  "use_autoclose": true,
+  "format_on_save": "on",
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
+  "auto_install_extensions": {
+    "toml": true,
+    "just": true,
+    "cargo-tom": true
+  }
+}
